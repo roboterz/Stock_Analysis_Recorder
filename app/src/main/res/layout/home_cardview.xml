@@ -13,78 +13,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_transaction_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_code_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="AAA"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.125"/>
-
-        <TextView
-            android:id="@+id/tv_sell_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="23.9"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_code_value"
-            app:layout_constraintWidth_percent="0.125"/>
-
-        <TextView
-            android:id="@+id/tv_buy_bottom_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="23"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_sell_value"
-            app:layout_constraintWidth_percent="0.25" />
-
-        <TextView
-            android:id="@+id/tv_buy_top_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="24"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_buy_bottom_value"
-            app:layout_constraintWidth_percent="0.25" />
-
-        <TextView
-            android:id="@+id/tv_bomb_point_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="26"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_buy_top_value"
-            app:layout_constraintWidth_percent="0.125" />
-
-        <TextView
-            android:id="@+id/tv_stress_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="30"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_bomb_point_value"
-            app:layout_constraintWidth_percent="0.125" />
-
-        <TextView
-            android:id="@+id/tv_direction_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:pointerIcon="hand"
-            android:text="涨/跌"
-            android:gravity="center"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_stress_value"
-            app:layout_constraintWidth_percent="0.125" />
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
 
         <TextView
             android:id="@+id/tv_star_value"
@@ -92,9 +23,100 @@
             android:layout_height="wrap_content"
             android:pointerIcon="hand"
             android:gravity="center"
+            android:textColor="@color/yellow"
             tools:ignore="MissingConstraints"
-            app:layout_constraintStart_toEndOf="@+id/tv_direction_value"
-            app:layout_constraintWidth_percent="0.125" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.05" />
+
+        <TextView
+            android:id="@+id/tv_code_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="AAA"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_star_value"
+            app:layout_constraintWidth_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/tv_sell_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="23.9"
+            android:textColor="@color/red"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_code_value"
+            app:layout_constraintWidth_percent="0.14"/>
+
+        <TextView
+            android:id="@+id/tv_buy_bottom_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="23"
+            android:textColor="@color/black"
+            android:gravity="right"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_sell_value"
+            app:layout_constraintWidth_percent="0.14" />
+
+        <TextView
+            android:id="@+id/tv_buy_between"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textColor="@color/black"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_buy_bottom_value"
+            app:layout_constraintWidth_percent="0.02" />
+
+        <TextView
+            android:id="@+id/tv_buy_top_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="24"
+            android:textColor="@color/black"
+            android:gravity="left"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_buy_between"
+            app:layout_constraintWidth_percent="0.14" />
+
+        <TextView
+            android:id="@+id/tv_breakthrough_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="26"
+            android:textColor="@color/green"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_buy_top_value"
+            app:layout_constraintWidth_percent="0.15" />
+
+        <TextView
+            android:id="@+id/tv_stress_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="30"
+            android:textColor="@color/red"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_breakthrough_value"
+            app:layout_constraintWidth_percent="0.15" />
+
+        <TextView
+            android:id="@+id/tv_direction_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:pointerIcon="hand"
+            android:gravity="center"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toEndOf="@+id/tv_stress_value"
+            app:layout_constraintWidth_percent="0.07" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
