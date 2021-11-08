@@ -12,6 +12,7 @@ import com.example.option.R
 import com.example.option.data.AppDatabase
 import com.example.option.data.entities.Stock
 import com.example.option.databinding.FragmentHomeBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -31,16 +32,57 @@ class HomeFragment : Fragment() {
 
         Thread {
             this.activity?.runOnUiThread {
+                val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL,false)
+
+                // specify the layout manager for recycler view
+                binding.homeRecyclerview.layoutManager = linearLayoutManager
+
                 homeAdapter = this.context?.let {
                     HomeAdapter(object: HomeAdapter.OnClickListener {
                         // catch the item click event from adapter
-                        override fun onItemClick(rID: Int) {
-                            // switch to record fragment (Edit mode)
+                        override fun onItemClick(rID: Int, typeID: Int) {
 
+                            homeViewModel.rID = rID
+                            homeViewModel.tID = typeID
+
+                            // switch to record fragment (Edit mode)
+                            when (typeID){
+                                0 -> {
+                                    //tv_code_show.text = homeAdapter?.getStock(rID)?.code
+                                    code_input.visibility = View.VISIBLE
+                                }
+                                1 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.sell.toString()
+                                    price_input.visibility = View.VISIBLE
+                                }
+                                2 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_bottom.toString()
+                                    price_input.visibility = View.VISIBLE
+                                }
+                                3 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_top.toString()
+                                    price_input.visibility = View.VISIBLE
+                                }
+                                4 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.breakthrough.toString()
+                                    price_input.visibility = View.VISIBLE
+                                }
+                                5 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.stress.toString()
+                                    price_input.visibility = View.VISIBLE
+                                }
+                                6,7 -> homeAdapter?.let { it1 ->
+                                            AppDatabase.getDatabase(requireContext()).stock().updateStock(
+                                                it1.getStock(rID))
+                                            //Snackbar.make(requireView(), it1.getStock(rID).code, Snackbar.LENGTH_SHORT).show()
+                                        }
+                            }
+
+                            homeViewModel.stock = homeAdapter?.getStock(rID)!!
                         }
                     })
                 }
-                //recyclerView_activity.adapter = vpAdapter
+                binding.homeRecyclerview.adapter = homeAdapter
             }
         }.start()
     }
@@ -51,52 +93,229 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         //val textView: TextView = binding.textHome
-        Thread {
-        homeViewModel.loadData(activity)
-    }.start()
+
+        loadDataToViewModel()
+
         return root
 
     }
 
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val fab: View = view.findViewById(R.id.fab)
+        // fab button
         this.fab.setOnClickListener { view ->
-            //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            //.setAction("Action", null).show()
             AppDatabase.getDatabase(view.context).stock().addStock(Stock())
+            loadDataToViewModel()
+            refreshRecyclerView()
         }
+
+        // code input
+        codeInput()
+
+        // price input
+        priceInput()
     }
 
     override fun onResume() {
         super.onResume()
-        //homeViewModel.stocks
+
+        refreshRecyclerView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+
+    private fun loadDataToViewModel() {
+        homeViewModel.loadData(activity)
+    }
+
+    private fun refreshRecyclerView(){
         Thread {
             activity?.runOnUiThread {
-                val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL,false)
-
-                // specify the layout manager for recycler view
-                binding.homeRecyclerview.layoutManager = linearLayoutManager
-
-                //val mlist = ArrayList<Stock>()
-
-                //mlist.add(Stock("NVDA",3225.00,2586.00,2587.00,2998.00,2984.00,true,true))
                 homeAdapter?.setList(homeViewModel.stocks)
                 binding.homeRecyclerview.adapter = homeAdapter
             }
         }.start()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    // code input function
+    private fun codeInput(){
+        tv_code_a.setOnClickListener{
+            tv_code_show.append(tv_code_a.text)
+        }
+        tv_code_b.setOnClickListener{
+            tv_code_show.append(tv_code_b.text)
+        }
+        tv_code_c.setOnClickListener{
+            tv_code_show.append(tv_code_c.text)
+        }
+        tv_code_d.setOnClickListener{
+            tv_code_show.append(tv_code_d.text)
+        }
+        tv_code_e.setOnClickListener{
+            tv_code_show.append(tv_code_e.text)
+        }
+        tv_code_f.setOnClickListener{
+            tv_code_show.append(tv_code_f.text)
+        }
+        tv_code_g.setOnClickListener{
+            tv_code_show.append(tv_code_g.text)
+        }
+        tv_code_h.setOnClickListener{
+            tv_code_show.append(tv_code_h.text)
+        }
+        tv_code_i.setOnClickListener{
+            tv_code_show.append(tv_code_i.text)
+        }
+        tv_code_j.setOnClickListener{
+            tv_code_show.append(tv_code_j.text)
+        }
+        tv_code_k.setOnClickListener{
+            tv_code_show.append(tv_code_k.text)
+        }
+        tv_code_l.setOnClickListener{
+            tv_code_show.append(tv_code_l.text)
+        }
+        tv_code_m.setOnClickListener{
+            tv_code_show.append(tv_code_m.text)
+        }
+        tv_code_n.setOnClickListener{
+            tv_code_show.append(tv_code_n.text)
+        }
+        tv_code_o.setOnClickListener{
+            tv_code_show.append(tv_code_o.text)
+        }
+        tv_code_p.setOnClickListener{
+            tv_code_show.append(tv_code_p.text)
+        }
+        tv_code_q.setOnClickListener{
+            tv_code_show.append(tv_code_q.text)
+        }
+        tv_code_r.setOnClickListener{
+            tv_code_show.append(tv_code_r.text)
+        }
+        tv_code_s.setOnClickListener{
+            tv_code_show.append(tv_code_s.text)
+        }
+        tv_code_t.setOnClickListener{
+            tv_code_show.append(tv_code_t.text)
+        }
+        tv_code_u.setOnClickListener{
+            tv_code_show.append(tv_code_u.text)
+        }
+        tv_code_v.setOnClickListener{
+            tv_code_show.append(tv_code_v.text)
+        }
+        tv_code_w.setOnClickListener{
+            tv_code_show.append(tv_code_w.text)
+        }
+        tv_code_x.setOnClickListener{
+            tv_code_show.append(tv_code_x.text)
+        }
+        tv_code_y.setOnClickListener{
+            tv_code_show.append(tv_code_y.text)
+        }
+        tv_code_z.setOnClickListener{
+            tv_code_show.append(tv_code_z.text)
+        }
+
+        // delete last char | exit without save
+        tv_code_back.setOnClickListener {
+            if (tv_code_show.length() > 0) {
+                tv_code_show.text = tv_code_show.text.dropLast(1)
+            }else{
+                code_input.visibility = View.GONE
+            }
+        }
+
+        // save and exit
+        tv_code_enter.setOnClickListener {
+            val stock = homeAdapter?.getStock(homeViewModel.rID)
+
+            if (stock != null) {
+                stock.code = tv_code_show.text.toString()
+                AppDatabase.getDatabase(requireContext()).stock().addStock(stock)
+                loadDataToViewModel()
+                refreshRecyclerView()
+            }
+            tv_code_show.text = ""
+            code_input.visibility = View.GONE
+        }
+    }
+
+    private fun priceInput(){
+        tv_price_1.setOnClickListener {
+            tv_price_show.append(tv_price_1.text)
+        }
+        tv_price_2.setOnClickListener {
+            tv_price_show.append(tv_price_2.text)
+        }
+        tv_price_3.setOnClickListener {
+            tv_price_show.append(tv_price_3.text)
+        }
+        tv_price_4.setOnClickListener {
+            tv_price_show.append(tv_price_4.text)
+        }
+        tv_price_5.setOnClickListener {
+            tv_price_show.append(tv_price_5.text)
+        }
+        tv_price_6.setOnClickListener {
+            tv_price_show.append(tv_price_6.text)
+        }
+        tv_price_7.setOnClickListener {
+            tv_price_show.append(tv_price_7.text)
+        }
+        tv_price_8.setOnClickListener {
+            tv_price_show.append(tv_price_8.text)
+        }
+        tv_price_9.setOnClickListener {
+            tv_price_show.append(tv_price_9.text)
+        }
+        tv_price_0.setOnClickListener {
+            tv_price_show.append(tv_price_0.text)
+        }
+        tv_price_dot.setOnClickListener {
+            tv_price_show.append(tv_price_dot.text)
+        }
+
+        // delete last char | exit without save
+        tv_price_back.setOnClickListener {
+            if (tv_price_show.length() > 0){
+                tv_price_show.text = tv_price_show.text.dropLast(1)
+            }else{
+                price_input.visibility = View.GONE
+            }
+        }
+
+        // enter
+        tv_price_enter.setOnClickListener {
+            when (homeViewModel.tID){
+                1 -> homeViewModel.stock.sell = tv_price_show.text.toString().toDouble()
+                2 -> homeViewModel.stock.buy_bottom = tv_price_show.text.toString().toDouble()
+                3 -> homeViewModel.stock.buy_top = tv_price_show.text.toString().toDouble()
+                4 -> homeViewModel.stock.breakthrough = tv_price_show.text.toString().toDouble()
+                5 -> homeViewModel.stock.stress = tv_price_show.text.toString().toDouble()
+            }
+            AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
+            loadDataToViewModel()
+            refreshRecyclerView()
+
+            tv_price_show.text = ""
+            price_input.visibility = View.GONE
+        }
     }
 }

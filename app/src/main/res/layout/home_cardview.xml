@@ -14,8 +14,8 @@
         android:id="@+id/layout_transaction_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/tv_star_value"

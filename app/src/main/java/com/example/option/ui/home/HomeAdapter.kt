@@ -22,7 +22,8 @@ class HomeAdapter(
 
         // interface for passing the onClick event to fragment.
         interface OnClickListener {
-            fun onItemClick(rID: Int)
+            fun onItemClick(rID: Int, typeID: Int)
+            // typeID, 0:code, 1:sell, 2:buy bottom, 3:buy top, 4:breakthrough, 5:stress, 6:direction, 7:star
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +43,7 @@ class HomeAdapter(
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             // display the custom class
             mlist[position].apply {
-                holder.tvCode.text = "$code"
+                holder.tvCode.text = code
                 holder.tvSell.text = "$sell"
                 holder.tvBottomBuy.text = "$buy_bottom"
                 holder.tvTopBuy.text = "$buy_top"
@@ -59,7 +60,7 @@ class HomeAdapter(
                 holder.tvStar.text = if (star) "⭐" else "⬜"
 
 
-                //
+                // direction
                 holder.tvDirection.setOnClickListener{
                     direction = !direction
 
@@ -70,18 +71,49 @@ class HomeAdapter(
                         holder.tvDirection.text = "↗️"
                         holder.tvDirection.setBackgroundColor(holder.upColor)
                     }
+                    onClickListener.onItemClick(position,6)
                 }
 
+                // star
                 holder.tvStar.setOnClickListener{
                     star = !star
                     holder.tvStar.text = if (star) "⭐" else "⬜"
-                    onClickListener.onItemClick(position)
+                    onClickListener.onItemClick(position,7)
                 }
 
+                // code
                 holder.tvCode.setOnClickListener{
-                    code = "AA"
-                    holder.tvCode.text = "$code"
+                    onClickListener.onItemClick(position,0)
+                }
 
+                // sell
+                holder.tvSell.setOnClickListener{
+
+                    onClickListener.onItemClick(position,1)
+                }
+
+                // buy bottom
+                holder.tvBottomBuy.setOnClickListener{
+
+                    onClickListener.onItemClick(position,2)
+                }
+
+                // buy top
+                holder.tvTopBuy.setOnClickListener{
+
+                    onClickListener.onItemClick(position,3)
+                }
+
+                // breakthrough
+                holder.tvBreakthrough.setOnClickListener{
+
+                    onClickListener.onItemClick(position,4)
+                }
+
+                // stress
+                holder.tvStress.setOnClickListener{
+
+                    onClickListener.onItemClick(position,5)
                 }
             }
 
@@ -89,7 +121,7 @@ class HomeAdapter(
 
 
         @SuppressLint("NotifyDataSetChanged")
-        fun setList(list: List<Stock>){
+        fun setList(list: List<Stock> = mlist){
             mlist = list
             notifyDataSetChanged()
         }

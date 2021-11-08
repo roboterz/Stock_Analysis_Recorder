@@ -2,10 +2,11 @@ package com.example.option.data.entities
 
 import androidx.room.*
 
-@Entity(indices = [Index(value = ["code"], unique = true)])
+@Entity(indices = [Index(value = ["id"], unique = true)])
 
 data class Stock(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
     var code: String,
     var sell: Double,
     var buy_bottom: Double,
@@ -16,6 +17,7 @@ data class Stock(
     var star: Boolean
 ){
     constructor() : this(
+        0,
         "",
         0.0,
         0.0,
