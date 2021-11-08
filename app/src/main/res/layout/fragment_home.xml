@@ -783,6 +783,7 @@
                 android:singleLine="true"
                 android:paddingEnd="40dp"
                 android:drawableEnd="@drawable/ic_baseline_backspace_24"
+                android:drawableTint="@color/gray_deep"
                 android:background="@drawable/textview_border"
                 android:textColor="@color/white"
                 android:textStyle="bold"

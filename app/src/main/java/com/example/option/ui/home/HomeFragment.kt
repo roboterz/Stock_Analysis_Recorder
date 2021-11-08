@@ -244,15 +244,13 @@ class HomeFragment : Fragment() {
 
         // save and exit
         tv_code_enter.setOnClickListener {
-            val stock = homeAdapter?.getStock(homeViewModel.rID)
-
-            if (stock != null) {
-                stock.code = tv_code_show.text.toString()
-                AppDatabase.getDatabase(requireContext()).stock().addStock(stock)
+            if (tv_code_show.length() > 0) {
+                homeViewModel.stock.code = tv_code_show.text.toString()
+                AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
                 loadDataToViewModel()
                 refreshRecyclerView()
+                tv_code_show.text = ""
             }
-            tv_code_show.text = ""
             code_input.visibility = View.GONE
         }
     }
@@ -303,18 +301,20 @@ class HomeFragment : Fragment() {
 
         // enter
         tv_price_enter.setOnClickListener {
-            when (homeViewModel.tID){
-                1 -> homeViewModel.stock.sell = tv_price_show.text.toString().toDouble()
-                2 -> homeViewModel.stock.buy_bottom = tv_price_show.text.toString().toDouble()
-                3 -> homeViewModel.stock.buy_top = tv_price_show.text.toString().toDouble()
-                4 -> homeViewModel.stock.breakthrough = tv_price_show.text.toString().toDouble()
-                5 -> homeViewModel.stock.stress = tv_price_show.text.toString().toDouble()
-            }
-            AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
-            loadDataToViewModel()
-            refreshRecyclerView()
+            if (tv_price_show.length() > 0){
+                when (homeViewModel.tID){
+                    1 -> homeViewModel.stock.sell = tv_price_show.text.toString().toDouble()
+                    2 -> homeViewModel.stock.buy_bottom = tv_price_show.text.toString().toDouble()
+                    3 -> homeViewModel.stock.buy_top = tv_price_show.text.toString().toDouble()
+                    4 -> homeViewModel.stock.breakthrough = tv_price_show.text.toString().toDouble()
+                    5 -> homeViewModel.stock.stress = tv_price_show.text.toString().toDouble()
+                }
+                AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
+                loadDataToViewModel()
+                refreshRecyclerView()
 
-            tv_price_show.text = ""
+                tv_price_show.text = ""
+            }
             price_input.visibility = View.GONE
         }
     }
