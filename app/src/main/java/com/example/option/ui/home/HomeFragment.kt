@@ -1,9 +1,19 @@
 package com.example.option.ui.home
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +50,7 @@ class HomeFragment : Fragment() {
                 homeAdapter = this.context?.let {
                     HomeAdapter(object: HomeAdapter.OnClickListener {
                         // catch the item click event from adapter
+                        @RequiresApi(Build.VERSION_CODES.S)
                         override fun onItemClick(rID: Int, typeID: Int) {
 
                             homeViewModel.rID = rID
@@ -48,40 +59,85 @@ class HomeFragment : Fragment() {
                             // switch to record fragment (Edit mode)
                             when (typeID){
                                 0 -> {
-                                    //tv_code_show.text = homeAdapter?.getStock(rID)?.code
-                                    code_input.visibility = View.VISIBLE
+                                    val dialogBuilder = AlertDialog.Builder(activity)
+
+                                    dialogBuilder.setMessage("确定删除此记录？")
+                                        .setCancelable(true)
+                                        .setPositiveButton("确定",
+                                            DialogInterface.OnClickListener{ _, _->
+                                            // delete record
+                                            homeAdapter?.getStock(rID)?.let { it1 ->
+                                                AppDatabase.getDatabase(it).stock().deleteStock(it1)
+                                            }
+                                            loadDataToViewModel()
+                                            refreshRecyclerView()
+                                        })
+                                        .setNegativeButton("取消",
+                                            DialogInterface.OnClickListener{ dialog, _ ->
+                                            // cancel
+                                            dialog.cancel()
+                                        })
+                                        .setTitle("注意")
+
+                                    // set Title Style
+                                    //val titleView = layoutInflater.inflate(R.layout.popup_title,null)
+                                    // set Title Text
+                                    //titleView.tv_popup_title_text.text = getText(R.string.msg_Title_prompt)
+
+                                    val alert = dialogBuilder.create()
+                                    //alert.setIcon(R.drawable.ic_baseline_delete_forever_24)
+                                    //alert.setCustomTitle(titleView)
+                                    alert.show()
                                 }
                                 1 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.sell.toString()
-                                    price_input.visibility = View.VISIBLE
+                                    //tv_code_show.text = homeAdapter?.getStock(rID)?.code
+                                    price_input.visibility = View.GONE
+                                    code_input.visibility = View.VISIBLE
+
                                 }
                                 2 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_bottom.toString()
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.sell.toString()
+                                    code_input.visibility = View.GONE
                                     price_input.visibility = View.VISIBLE
                                 }
                                 3 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_top.toString()
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_bottom.toString()
+                                    code_input.visibility = View.GONE
                                     price_input.visibility = View.VISIBLE
                                 }
                                 4 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.breakthrough.toString()
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_top.toString()
+                                    code_input.visibility = View.GONE
                                     price_input.visibility = View.VISIBLE
                                 }
                                 5 -> {
+                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.breakthrough.toString()
+                                    code_input.visibility = View.GONE
+                                    price_input.visibility = View.VISIBLE
+                                    //binding.homeRecyclerview.isClickable = false
+                                }
+                                6 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.stress.toString()
+                                    code_input.visibility = View.GONE
                                     price_input.visibility = View.VISIBLE
                                 }
-                                6,7 -> homeAdapter?.let { it1 ->
-                                            AppDatabase.getDatabase(requireContext()).stock().updateStock(
+                                7,8 -> {homeAdapter?.let { it1 ->
+                                            AppDatabase.getDatabase(it).stock().updateStock(
                                                 it1.getStock(rID))
                                             //Snackbar.make(requireView(), it1.getStock(rID).code, Snackbar.LENGTH_SHORT).show()
                                         }
+                                    loadDataToViewModel()
+                                    refreshRecyclerView()
+                                }
                             }
 
+                            homeAdapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                             homeViewModel.stock = homeAdapter?.getStock(rID)!!
                         }
                     })
                 }
+
+
                 binding.homeRecyclerview.adapter = homeAdapter
             }
         }.start()
@@ -147,13 +203,26 @@ class HomeFragment : Fragment() {
         Thread {
             activity?.runOnUiThread {
                 homeAdapter?.setList(homeViewModel.stocks)
-                binding.homeRecyclerview.adapter = homeAdapter
+                //binding.homeRecyclerview.adapter = homeAdapter
             }
         }.start()
     }
 
     // code input function
+    @SuppressLint("ClickableViewAccessibility")
     private fun codeInput(){
+
+        // press
+        for (txtView in code_input_keys){
+            txtView.setOnTouchListener { view, motionEvent ->
+                when (motionEvent.actionMasked){
+                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray_background))}
+                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.textview_border)}
+                }
+                false
+            }
+        }
+
         tv_code_a.setOnClickListener{
             tv_code_show.append(tv_code_a.text)
         }
@@ -255,7 +324,20 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility", "ResourceType")
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun priceInput(){
+
+        for (txtView in price_input_keys){
+            txtView.setOnTouchListener { view, motionEvent ->
+                when (motionEvent.actionMasked){
+                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray_background))}
+                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.textview_border)}
+                }
+                false
+            }
+        }
+
         tv_price_1.setOnClickListener {
             tv_price_show.append(tv_price_1.text)
         }
@@ -284,10 +366,37 @@ class HomeFragment : Fragment() {
             tv_price_show.append(tv_price_9.text)
         }
         tv_price_0.setOnClickListener {
-            tv_price_show.append(tv_price_0.text)
+            if (tv_price_show.text.toString() !="0"){
+                tv_price_show.append(tv_price_0.text)
+            }
         }
         tv_price_dot.setOnClickListener {
-            tv_price_show.append(tv_price_dot.text)
+            if (!tv_price_show.text.contains(tv_price_dot.text)) {
+                tv_price_show.append(tv_price_dot.text)
+            }
+        }
+        tv_price_negative.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(activity)
+
+            dialogBuilder.setMessage("确定删除此记录？")
+                .setCancelable(true)
+                .setPositiveButton("确定",
+                    DialogInterface.OnClickListener{ _, _->
+                        // delete record
+                        AppDatabase.getDatabase(requireContext()).stock().deleteStock(homeViewModel.stock)
+                        loadDataToViewModel()
+                        refreshRecyclerView()
+                    })
+                .setNegativeButton("取消",
+                    DialogInterface.OnClickListener{ dialog, _ ->
+                        // cancel
+                        dialog.cancel()
+                    })
+                .setTitle("注意")
+
+            val alert = dialogBuilder.create()
+            alert.show()
+            price_input.visibility = View.GONE
         }
 
         // delete last char | exit without save
@@ -295,27 +404,34 @@ class HomeFragment : Fragment() {
             if (tv_price_show.length() > 0){
                 tv_price_show.text = tv_price_show.text.dropLast(1)
             }else{
+                refreshRecyclerView()
                 price_input.visibility = View.GONE
             }
         }
+
 
         // enter
         tv_price_enter.setOnClickListener {
             if (tv_price_show.length() > 0){
                 when (homeViewModel.tID){
-                    1 -> homeViewModel.stock.sell = tv_price_show.text.toString().toDouble()
-                    2 -> homeViewModel.stock.buy_bottom = tv_price_show.text.toString().toDouble()
-                    3 -> homeViewModel.stock.buy_top = tv_price_show.text.toString().toDouble()
-                    4 -> homeViewModel.stock.breakthrough = tv_price_show.text.toString().toDouble()
-                    5 -> homeViewModel.stock.stress = tv_price_show.text.toString().toDouble()
+                    2 -> homeViewModel.stock.sell = tv_price_show.text.toString().toDouble()
+                    3 -> homeViewModel.stock.buy_bottom = tv_price_show.text.toString().toDouble()
+                    4 -> homeViewModel.stock.buy_top = tv_price_show.text.toString().toDouble()
+                    5 -> homeViewModel.stock.breakthrough = tv_price_show.text.toString().toDouble()
+                    6 -> homeViewModel.stock.stress = tv_price_show.text.toString().toDouble()
                 }
                 AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
                 loadDataToViewModel()
-                refreshRecyclerView()
 
                 tv_price_show.text = ""
             }
+            //val recyclerViewState: Parcelable =
+            refreshRecyclerView()
+
             price_input.visibility = View.GONE
+            //binding.homeRecyclerview.isClickable = true
+
         }
     }
 }
+

@@ -14,7 +14,7 @@
     <string name="header_sell">止损位</string>
     <string name="header_buy">买入范围</string>
     <string name="header_bomb_point">突破点</string>
-    <string name="header_stress">压力位</string>
+    <string name="header_stress">目标位</string>
     <string name="header_direction">方向</string>
     <string name="header_star">标星</string>
 

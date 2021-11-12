@@ -14,4 +14,5 @@
     <color name="gray">#C4C4C4</color>
     <color name="gray_deep">#555555</color>
     <color name="gray_background">#888888</color>
+    <color name="yellow_active">#4CB9DB</color>
 </resources>

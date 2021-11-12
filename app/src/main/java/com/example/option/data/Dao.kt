@@ -17,7 +17,7 @@ interface StockDao {
     fun deleteStock(stock: Stock)
 
     @Transaction
-    @Query("SELECT * FROM Stock")
+    @Query("SELECT * FROM Stock ORDER BY star DESC, code ASC")
     fun getStocks(): List<Stock>
 
     // get a record BY ID
