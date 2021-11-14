@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/price_input"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/gray"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:context=".ui.keyboard.PriceKeyboard">
+
+        <TextView
+            android:id="@+id/tv_price_show"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/gray_background"
+            android:gravity="center"
+            android:maxLength="10"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/price_input_keys"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_price_show"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+
+            <TextView
+                android:id="@+id/tv_price_1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="1"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="2"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="3"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="4"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_price_1"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="5"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_4"
+                app:layout_constraintTop_toTopOf="@+id/tv_price_4"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="6"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_5"
+                app:layout_constraintTop_toTopOf="@+id/tv_price_4"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="7"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_price_4"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="8"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_7"
+                app:layout_constraintTop_toTopOf="@id/tv_price_7"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="9"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_8"
+                app:layout_constraintTop_toTopOf="@id/tv_price_7"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_dot"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                android:text="."
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_price_7"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:text="0"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@id/tv_price_dot"
+                app:layout_constraintTop_toTopOf="@id/tv_price_dot"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_calc"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="40dp"
+                android:gravity="center"
+                android:background="@drawable/textview_border"
+                android:drawableStart="@drawable/ic_baseline_calculate_24"
+                android:drawableTint="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toEndOf="@+id/tv_price_0"
+                app:layout_constraintTop_toTopOf="@id/tv_price_0"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_price_back"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:singleLine="true"
+                android:paddingEnd="40dp"
+                android:background="@drawable/textview_border"
+                android:textColor="@color/gray_deep"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.5"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                app:drawableTint="@color/gray_deep"
+                app:drawableEndCompat="@drawable/ic_baseline_backspace_24" />
+
+            <TextView
+                android:id="@+id/tv_price_enter"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="Enter"
+                android:background="@drawable/textview_border"
+                android:textColor="@color/gray_deep"
+                android:textSize="24sp"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintStart_toStartOf="@+id/tv_price_back"
+                app:layout_constraintTop_toBottomOf="@+id/tv_price_back"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

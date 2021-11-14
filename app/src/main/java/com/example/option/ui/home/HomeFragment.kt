@@ -18,13 +18,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.option.R
 import com.example.option.data.AppDatabase
 import com.example.option.data.entities.Stock
 import com.example.option.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.keyboard.*
+import androidx.fragment.app.FragmentManager
+import com.example.option.R
+import com.example.option.ui.keyboard.PriceKeyboard
+
 
 class HomeFragment : Fragment() {
 
@@ -165,6 +169,7 @@ class HomeFragment : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -179,6 +184,7 @@ class HomeFragment : Fragment() {
         codeInput()
 
         // price input
+        //PriceKeyboard()
         priceInput()
     }
 
@@ -375,7 +381,7 @@ class HomeFragment : Fragment() {
                 tv_price_show.append(tv_price_dot.text)
             }
         }
-        tv_price_negative.setOnClickListener {
+        tv_price_calc.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(activity)
 
             dialogBuilder.setMessage("确定删除此记录？")
