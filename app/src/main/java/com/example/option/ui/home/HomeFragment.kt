@@ -101,40 +101,29 @@ class HomeFragment : Fragment() {
                                     alert.show()
                                 }
                                 1 -> {
-                                    //tv_code_show.text = homeAdapter?.getStock(rID)?.code
                                     PriceKeyboard(view!!).hide()
                                     codeEnter(homeViewModel.stock.code)
 
                                 }
                                 2 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.sell.toString()
 
-                                    code_input.visibility = View.GONE
                                     PriceKeyboard(view!!).setValue(homeViewModel.stock.sell)
                                     PriceKeyboard(view!!).show()
                                 }
                                 3 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_bottom.toString()
-                                    code_input.visibility = View.GONE
                                     PriceKeyboard(view!!).setValue(homeViewModel.stock.buy_bottom)
                                     PriceKeyboard(view!!).show()
                                 }
                                 4 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_top.toString()
-                                    code_input.visibility = View.GONE
                                     PriceKeyboard(view!!).setValue(homeViewModel.stock.buy_top)
                                     PriceKeyboard(view!!).show()
                                 }
                                 5 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.breakthrough.toString()
-                                    code_input.visibility = View.GONE
                                     PriceKeyboard(view!!).setValue(homeViewModel.stock.breakthrough)
                                     PriceKeyboard(view!!).show()
                                     //binding.homeRecyclerview.isClickable = false
                                 }
                                 6 -> {
-                                    //tv_price_show.text = homeAdapter?.getStock(rID)?.stress.toString()
-                                    code_input.visibility = View.GONE
                                     PriceKeyboard(view!!).setValue(homeViewModel.stock.stress)
                                     PriceKeyboard(view!!).show()
                                 }
@@ -190,8 +179,6 @@ class HomeFragment : Fragment() {
             codeEnter()
         }
 
-        // code input
-        //codeInput()
 
         // price input
         priceInput()
@@ -265,121 +252,6 @@ class HomeFragment : Fragment() {
         }.start()
     }
 
-    // code input function
-    @SuppressLint("ClickableViewAccessibility")
-    private fun codeInput(){
-
-        // press
-        for (txtView in code_input_keys){
-            txtView.setOnTouchListener { view, motionEvent ->
-                when (motionEvent.actionMasked){
-                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.keyboard_background))}
-                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.keyboard_border)}
-                }
-                false
-            }
-        }
-
-        tv_code_a.setOnClickListener{
-            tv_code_show.append(tv_code_a.text)
-        }
-        tv_code_b.setOnClickListener{
-            tv_code_show.append(tv_code_b.text)
-        }
-        tv_code_c.setOnClickListener{
-            tv_code_show.append(tv_code_c.text)
-        }
-        tv_code_d.setOnClickListener{
-            tv_code_show.append(tv_code_d.text)
-        }
-        tv_code_e.setOnClickListener{
-            tv_code_show.append(tv_code_e.text)
-        }
-        tv_code_f.setOnClickListener{
-            tv_code_show.append(tv_code_f.text)
-        }
-        tv_code_g.setOnClickListener{
-            tv_code_show.append(tv_code_g.text)
-        }
-        tv_code_h.setOnClickListener{
-            tv_code_show.append(tv_code_h.text)
-        }
-        tv_code_i.setOnClickListener{
-            tv_code_show.append(tv_code_i.text)
-        }
-        tv_code_j.setOnClickListener{
-            tv_code_show.append(tv_code_j.text)
-        }
-        tv_code_k.setOnClickListener{
-            tv_code_show.append(tv_code_k.text)
-        }
-        tv_code_l.setOnClickListener{
-            tv_code_show.append(tv_code_l.text)
-        }
-        tv_code_m.setOnClickListener{
-            tv_code_show.append(tv_code_m.text)
-        }
-        tv_code_n.setOnClickListener{
-            tv_code_show.append(tv_code_n.text)
-        }
-        tv_code_o.setOnClickListener{
-            tv_code_show.append(tv_code_o.text)
-        }
-        tv_code_p.setOnClickListener{
-            tv_code_show.append(tv_code_p.text)
-        }
-        tv_code_q.setOnClickListener{
-            tv_code_show.append(tv_code_q.text)
-        }
-        tv_code_r.setOnClickListener{
-            tv_code_show.append(tv_code_r.text)
-        }
-        tv_code_s.setOnClickListener{
-            tv_code_show.append(tv_code_s.text)
-        }
-        tv_code_t.setOnClickListener{
-            tv_code_show.append(tv_code_t.text)
-        }
-        tv_code_u.setOnClickListener{
-            tv_code_show.append(tv_code_u.text)
-        }
-        tv_code_v.setOnClickListener{
-            tv_code_show.append(tv_code_v.text)
-        }
-        tv_code_w.setOnClickListener{
-            tv_code_show.append(tv_code_w.text)
-        }
-        tv_code_x.setOnClickListener{
-            tv_code_show.append(tv_code_x.text)
-        }
-        tv_code_y.setOnClickListener{
-            tv_code_show.append(tv_code_y.text)
-        }
-        tv_code_z.setOnClickListener{
-            tv_code_show.append(tv_code_z.text)
-        }
-
-        // delete last char | exit without save
-        tv_code_back.setOnClickListener {
-            if (tv_code_show.length() > 0) {
-                tv_code_show.text = tv_code_show.text.dropLast(1)
-            }else{
-                code_input.visibility = View.GONE
-            }
-        }
-
-        // save and exit
-        tv_code_enter.setOnClickListener {
-            if (tv_code_show.length() > 0) {
-                homeViewModel.stock.code = tv_code_show.text.toString()
-                AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
-                loadDataToViewModel()
-                refreshRecyclerView()
-                tv_code_show.text = ""
-            }
-            code_input.visibility = View.GONE
-        }
-    }
 
     @SuppressLint("ClickableViewAccessibility", "ResourceType")
     @RequiresApi(Build.VERSION_CODES.S)
