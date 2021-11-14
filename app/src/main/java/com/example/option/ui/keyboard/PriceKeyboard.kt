@@ -1,106 +1,104 @@
 package com.example.option.ui.keyboard
 
 import android.annotation.SuppressLint
-import android.opengl.Visibility
-import android.os.Build
-import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.iterator
-import androidx.fragment.app.Fragment
 import com.example.option.R
-import com.example.option.databinding.KeyboardBinding
+import kotlinx.android.synthetic.main.keyboard.view.*
 
 @SuppressLint("ClickableViewAccessibility")
-class PriceKeyboard(){
-    private var _binding: KeyboardBinding? = null
+class PriceKeyboard(view: View){
+    private val key0: TextView = view.findViewById<TextView>(R.id.tv_price_0)
+    private val keyBack: TextView = view.findViewById<TextView>(R.id.tv_price_back)
+    private val keyDot: TextView = view.findViewById<TextView>(R.id.tv_price_dot)
+    private val keyEnter: TextView = view.findViewById<TextView>(R.id.tv_price_enter)
+    private val keyCalc: TextView = view.findViewById<TextView>(R.id.tv_price_calc)
+    private val keyClear: TextView = view.findViewById<TextView>(R.id.tv_price_clear)
+    private val numberDisplay: TextView = view.findViewById<TextView>(R.id.tv_price_show)
+    private val keyboardPanel: ConstraintLayout = view.findViewById<ConstraintLayout>(R.id.price_input)
+    private val keys: ConstraintLayout = view.findViewById<ConstraintLayout>(R.id.price_input_keys)
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    fun initKeys() {
 
-    init {
-
-        for (txtView in binding.priceInputKeys){
-            txtView.setOnTouchListener { view, motionEvent ->
+        keys.forEach{
+            it.setOnTouchListener { view, motionEvent ->
                 when (motionEvent.actionMasked){
-                    MotionEvent.ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray_background))}
-                    MotionEvent.ACTION_UP -> {txtView.setBackgroundResource(R.drawable.textview_border)}
+                    MotionEvent.ACTION_DOWN -> {it.setBackgroundColor(ContextCompat.getColor(view.context, R.color.keyboard_frame))}
+                    MotionEvent.ACTION_UP -> {it.setBackgroundResource(R.drawable.keyboard_border)}
                 }
                 false
             }
-        }
-        binding.tvPrice1.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice1.text)
-        }
-        binding.tvPrice2.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice2.text)
-        }
-        binding.tvPrice3.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice3.text)
-        }
-        binding.tvPrice4.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice4.text)
-        }
-        binding.tvPrice5.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice5.text)
-        }
-        binding.tvPrice6.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice6.text)
-        }
-        binding.tvPrice7.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice7.text)
-        }
-        binding.tvPrice8.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice8.text)
-        }
-        binding.tvPrice9.setOnClickListener {
-            binding.tvPriceShow.append(binding.tvPrice9.text)
-        }
-        binding.tvPrice0.setOnClickListener {
-            if (binding.tvPriceShow.text.toString() !="0"){
-                binding.tvPriceShow.append(binding.tvPrice0.text)
+            when (it.tag){
+                "1","2","3","4","5","6","7","8","9" -> {
+                    it.setOnClickListener{ _ ->
+                        if (numberDisplay.text.toString().toDouble() == 0.0){
+                            numberDisplay.text = it.tag.toString()
+                        }else {
+                            numberDisplay.append(it.tag.toString())
+                        }
+                    }
+                }
             }
         }
-        binding.tvPriceDot.setOnClickListener {
-            if (!binding.tvPriceShow.text.contains(binding.tvPriceDot.text)) {
-                binding.tvPriceShow.append(binding.tvPriceDot.text)
+
+        key0.setOnClickListener {
+            if (numberDisplay.text.toString() !="0"){
+                numberDisplay.append(key0.text)
             }
         }
-        binding.tvPriceCalc.setOnClickListener {
+        keyDot.setOnClickListener {
+            if (!numberDisplay.text.contains(keyDot.text.toString())) {
+                numberDisplay.append(keyDot.text)
+            }
+        }
+        keyCalc.setOnClickListener {
 
             //binding.priceInput.visibility = View.GONE
         }
-        binding.tvPriceBack.setOnClickListener {
-            if (binding.tvPriceShow.length() > 0){
-                binding.tvPriceShow.text = binding.tvPriceShow.text.dropLast(1)
+        keyClear.setOnClickListener {
+            numberDisplay.text = "0"
+        }
+        keyBack.setOnClickListener {
+            if (numberDisplay.length() > 1){
+                numberDisplay.text = numberDisplay.text.dropLast(1)
             }else{
-                binding.priceInput.visibility = View.GONE
+                numberDisplay.text = "0"
             }
         }
-        binding.tvPriceEnter.setOnClickListener {
-            if (binding.tvPriceShow.length() > 0){
+        keyboardPanel.setOnClickListener {
+            if (numberDisplay.length() > 0){
 
-                binding.tvPriceShow.text = ""
+                numberDisplay.text = "0"
             }
             //val recyclerViewState: Parcelable =
 
-            binding.priceInput.visibility = View.GONE
+            keyboardPanel.visibility = View.GONE
             //binding.homeRecyclerview.isClickable = true
 
         }
+
+         
     }
 
     fun show(){
-        binding.priceInput.visibility = View.VISIBLE
+        keyboardPanel.visibility = View.VISIBLE
     }
 
     fun hide(){
-        binding.priceInput.visibility = View.GONE
+        keyboardPanel.visibility = View.GONE
     }
 
+    fun getResult(): String{
+        return numberDisplay.text.toString()
+    }
+
+    fun setValue(value: Double){
+        numberDisplay.text = value.toString()
+    }
 
 }

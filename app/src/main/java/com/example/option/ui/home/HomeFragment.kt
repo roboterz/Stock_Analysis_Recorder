@@ -2,15 +2,14 @@ package com.example.option.ui.home
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
@@ -21,13 +20,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.option.data.AppDatabase
 import com.example.option.data.entities.Stock
 import com.example.option.databinding.FragmentHomeBinding
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.keyboard.*
-import androidx.fragment.app.FragmentManager
 import com.example.option.R
 import com.example.option.ui.keyboard.PriceKeyboard
+
+import android.widget.EditText
+
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
+import android.text.InputType
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.*
 
 
 class HomeFragment : Fragment() {
@@ -41,6 +45,7 @@ class HomeFragment : Fragment() {
 
     private var homeAdapter: HomeAdapter? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,6 +55,7 @@ class HomeFragment : Fragment() {
 
                 // specify the layout manager for recycler view
                 binding.homeRecyclerview.layoutManager = linearLayoutManager
+                homeAdapter?.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
                 homeAdapter = this.context?.let {
                     HomeAdapter(object: HomeAdapter.OnClickListener {
@@ -59,6 +65,7 @@ class HomeFragment : Fragment() {
 
                             homeViewModel.rID = rID
                             homeViewModel.tID = typeID
+                            homeViewModel.stock = homeAdapter?.getStock(rID)!!
 
                             // switch to record fragment (Edit mode)
                             when (typeID){
@@ -95,35 +102,41 @@ class HomeFragment : Fragment() {
                                 }
                                 1 -> {
                                     //tv_code_show.text = homeAdapter?.getStock(rID)?.code
-                                    price_input.visibility = View.GONE
-                                    code_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).hide()
+                                    codeEnter(homeViewModel.stock.code)
 
                                 }
                                 2 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.sell.toString()
+
                                     code_input.visibility = View.GONE
-                                    price_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).setValue(homeViewModel.stock.sell)
+                                    PriceKeyboard(view!!).show()
                                 }
                                 3 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_bottom.toString()
                                     code_input.visibility = View.GONE
-                                    price_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).setValue(homeViewModel.stock.buy_bottom)
+                                    PriceKeyboard(view!!).show()
                                 }
                                 4 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.buy_top.toString()
                                     code_input.visibility = View.GONE
-                                    price_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).setValue(homeViewModel.stock.buy_top)
+                                    PriceKeyboard(view!!).show()
                                 }
                                 5 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.breakthrough.toString()
                                     code_input.visibility = View.GONE
-                                    price_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).setValue(homeViewModel.stock.breakthrough)
+                                    PriceKeyboard(view!!).show()
                                     //binding.homeRecyclerview.isClickable = false
                                 }
                                 6 -> {
                                     //tv_price_show.text = homeAdapter?.getStock(rID)?.stress.toString()
                                     code_input.visibility = View.GONE
-                                    price_input.visibility = View.VISIBLE
+                                    PriceKeyboard(view!!).setValue(homeViewModel.stock.stress)
+                                    PriceKeyboard(view!!).show()
                                 }
                                 7,8 -> {homeAdapter?.let { it1 ->
                                             AppDatabase.getDatabase(it).stock().updateStock(
@@ -135,8 +148,7 @@ class HomeFragment : Fragment() {
                                 }
                             }
 
-                            homeAdapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                            homeViewModel.stock = homeAdapter?.getStock(rID)!!
+
                         }
                     })
                 }
@@ -175,17 +187,15 @@ class HomeFragment : Fragment() {
 
         // fab button
         this.fab.setOnClickListener { view ->
-            AppDatabase.getDatabase(view.context).stock().addStock(Stock())
-            loadDataToViewModel()
-            refreshRecyclerView()
+            codeEnter()
         }
 
         // code input
-        codeInput()
+        //codeInput()
 
         // price input
-        //PriceKeyboard()
         priceInput()
+        PriceKeyboard(view).initKeys()
     }
 
     override fun onResume() {
@@ -196,9 +206,50 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 
+    private fun codeEnter(str: String = ""){
+        val alert = AlertDialog.Builder(context)
+        val editText = EditText(activity)
+
+        val filter = arrayOf<InputFilter>(LengthFilter(5))
+        editText.filters = filter
+        editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+        editText.setText(str)
+
+        editText.requestFocus()
+        editText.selectAll()
+        editText.post {
+            (editText.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+                .showSoftInput(editText,SHOW_IMPLICIT)
+        }
+
+
+        //alert.setMessage("Enter Your Message")
+        alert.setTitle("Enter Stock Code")
+            .setView(editText)
+            .setPositiveButton("Confirm",
+            DialogInterface.OnClickListener { dialog, whichButton -> //What ever you want to do with the value
+
+                if (str =="") {
+                    val stk = Stock()
+                    stk.code = editText.text.toString()
+                    AppDatabase.getDatabase(requireContext()).stock().addStock(stk)
+                }else{
+                    homeViewModel.stock.code = editText.text.toString()
+                    AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
+                }
+                loadDataToViewModel()
+                refreshRecyclerView()
+            })
+            .setNegativeButton("Cancel",
+            DialogInterface.OnClickListener { dialog, whichButton ->
+                // do nothing
+            })
+            .show()
+    }
 
 
     private fun loadDataToViewModel() {
@@ -222,8 +273,8 @@ class HomeFragment : Fragment() {
         for (txtView in code_input_keys){
             txtView.setOnTouchListener { view, motionEvent ->
                 when (motionEvent.actionMasked){
-                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray_background))}
-                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.textview_border)}
+                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.keyboard_background))}
+                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.keyboard_border)}
                 }
                 false
             }
@@ -334,53 +385,6 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun priceInput(){
 
-        for (txtView in price_input_keys){
-            txtView.setOnTouchListener { view, motionEvent ->
-                when (motionEvent.actionMasked){
-                    ACTION_DOWN -> {txtView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray_background))}
-                    ACTION_UP -> {txtView.setBackgroundResource(R.drawable.textview_border)}
-                }
-                false
-            }
-        }
-
-        tv_price_1.setOnClickListener {
-            tv_price_show.append(tv_price_1.text)
-        }
-        tv_price_2.setOnClickListener {
-            tv_price_show.append(tv_price_2.text)
-        }
-        tv_price_3.setOnClickListener {
-            tv_price_show.append(tv_price_3.text)
-        }
-        tv_price_4.setOnClickListener {
-            tv_price_show.append(tv_price_4.text)
-        }
-        tv_price_5.setOnClickListener {
-            tv_price_show.append(tv_price_5.text)
-        }
-        tv_price_6.setOnClickListener {
-            tv_price_show.append(tv_price_6.text)
-        }
-        tv_price_7.setOnClickListener {
-            tv_price_show.append(tv_price_7.text)
-        }
-        tv_price_8.setOnClickListener {
-            tv_price_show.append(tv_price_8.text)
-        }
-        tv_price_9.setOnClickListener {
-            tv_price_show.append(tv_price_9.text)
-        }
-        tv_price_0.setOnClickListener {
-            if (tv_price_show.text.toString() !="0"){
-                tv_price_show.append(tv_price_0.text)
-            }
-        }
-        tv_price_dot.setOnClickListener {
-            if (!tv_price_show.text.contains(tv_price_dot.text)) {
-                tv_price_show.append(tv_price_dot.text)
-            }
-        }
         tv_price_calc.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(activity)
 
@@ -403,16 +407,6 @@ class HomeFragment : Fragment() {
             val alert = dialogBuilder.create()
             alert.show()
             price_input.visibility = View.GONE
-        }
-
-        // delete last char | exit without save
-        tv_price_back.setOnClickListener {
-            if (tv_price_show.length() > 0){
-                tv_price_show.text = tv_price_show.text.dropLast(1)
-            }else{
-                refreshRecyclerView()
-                price_input.visibility = View.GONE
-            }
         }
 
 
