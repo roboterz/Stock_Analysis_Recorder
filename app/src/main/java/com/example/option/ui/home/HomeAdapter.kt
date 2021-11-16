@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.example.option.OnSwipeTouchListener
 import com.example.option.R
@@ -67,54 +68,69 @@ class HomeAdapter(
 
                 // direction
                 holder.tvDirection.setOnClickListener{
-                    direction = !direction
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else {
+                        direction = !direction
 
-                    if (direction) {
-                        holder.tvDirection.text = "↘️"
-                        holder.tvDirection.setBackgroundColor(holder.downColor)
-                    }else{
-                        holder.tvDirection.text = "↗️"
-                        holder.tvDirection.setBackgroundColor(holder.upColor)
+                        if (direction) {
+                            holder.tvDirection.text = "↘️"
+                            holder.tvDirection.setBackgroundColor(holder.downColor)
+                        }else{
+                            holder.tvDirection.text = "↗️"
+                            holder.tvDirection.setBackgroundColor(holder.upColor)
+                        }
+                        onClickListener.onItemClick(position,7)
                     }
-                    onClickListener.onItemClick(position,7)
                 }
 
                 // star
                 holder.tvStar.setOnClickListener{
                     star = !star
                     holder.tvStar.text = if (star) "⭐" else "⬜"
+                    holder.homeItemMenu.visibility = View.GONE
                     onClickListener.onItemClick(position,8)
                 }
 
                 // code
                 holder.tvCode.setOnClickListener{
-                    onClickListener.onItemClick(position,1)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,1)
+
                 }
+
 
                 // sell
                 holder.tvSell.setOnClickListener{
-                    onClickListener.onItemClick(position,2)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,2)
                 }
 
                 // buy bottom
                 holder.tvBottomBuy.setOnClickListener{
-                    onClickListener.onItemClick(position,3)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,3)
                 }
 
                 // buy top
                 holder.tvTopBuy.setOnClickListener{
-                    onClickListener.onItemClick(position,4)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,4)
                 }
 
                 // breakthrough
                 holder.tvBreakthrough.setOnClickListener{
-                    onClickListener.onItemClick(position,5)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,5)
                 }
 
                 // stress
                 holder.tvStress.setOnClickListener{
-                    onClickListener.onItemClick(position,6)
+                    if (holder.homeItemMenu.visibility == View.VISIBLE) holder.homeItemMenu.visibility = View.GONE
+                    else onClickListener.onItemClick(position,6)
                 }
+
+
+
 
                 /*
                 holder.cardView.setOnTouchListener(object: OnSwipeTouchListener() {
@@ -133,10 +149,23 @@ class HomeAdapter(
 
                         onClickListener.onItemClick(position,6)
                     }
+
                 })
 
                  */
 
+
+                holder.homeItemMenuDelete.setOnClickListener {
+                    onClickListener.onItemClick(position,0)
+                    holder.homeItemMenu.visibility = View.GONE
+                }
+
+                holder.homeItemInfo.forEach {
+                    it.setOnLongClickListener{
+                        holder.homeItemMenu.visibility = View.VISIBLE
+                        true
+                    }
+                }
                 // whole item
                 /*
                 holder.cardView.setOnTouchListener(object: OnSwipeTouchListener() {
@@ -214,7 +243,7 @@ class HomeAdapter(
             val tvStress: TextView = itemView.tv_stress_value
             val tvDirection: TextView = itemView.tv_direction_value
             val tvStar: TextView = itemView.tv_star_value
-            val homeItem: ConstraintLayout = itemView.layout_home_item
+            val homeItemInfo: ConstraintLayout = itemView.layout_home_item_info
             val homeItemMenu: ConstraintLayout = itemView.layout_home_Item_menu
             val homeItemMenuDelete: TextView = itemView.tv_home_item_delete
             val cardView: CardView = itemView.trans_card_view

@@ -19,6 +19,7 @@
         android:layout_height="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_home_item_info"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintWidth_percent="1"
