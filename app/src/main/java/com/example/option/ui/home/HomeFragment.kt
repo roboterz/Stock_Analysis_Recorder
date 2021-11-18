@@ -206,11 +206,12 @@ class HomeFragment : Fragment() {
         editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
         editText.setText(str)
 
+        editText.isFocusableInTouchMode = true
         editText.requestFocus()
         editText.selectAll()
         editText.post {
             (editText.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-                .showSoftInput(editText,SHOW_IMPLICIT)
+                .showSoftInput(editText, SHOW_IMPLICIT)
         }
 
 
@@ -222,10 +223,10 @@ class HomeFragment : Fragment() {
 
                 if (str =="") {
                     val stk = Stock()
-                    stk.code = editText.text.toString()
+                    stk.code = editText.text.toString().uppercase()
                     AppDatabase.getDatabase(requireContext()).stock().addStock(stk)
                 }else{
-                    homeViewModel.stock.code = editText.text.toString()
+                    homeViewModel.stock.code = editText.text.toString().uppercase()
                     AppDatabase.getDatabase(requireContext()).stock().addStock(homeViewModel.stock)
                 }
                 loadDataToViewModel()
